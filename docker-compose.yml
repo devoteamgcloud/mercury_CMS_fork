@@ -53,6 +53,7 @@ services:
             DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL}
             GOOGLE_APPLICATION_CREDENTIALS: /gcp/creds.json
             GOOGLE_CLOUD_PROJECT: ${PROJECT}
+            MERCURY_RUNNING_IN_CONTAINER: ${MERCURY_RUNNING_IN_CONTAINER}
         depends_on:
             - db
     db:
