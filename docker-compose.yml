@@ -16,6 +16,7 @@ services:
             - mercury
         command: "/bin/sh -c 'nginx -g \"daemon off;\"'"
     mercury:
+        platform: linux/x86_64
         restart: unless-stopped
         build:
             context: .
@@ -25,6 +26,7 @@ services:
             - ${NOTEBOOKS_PATH}:/app/notebooks
             - static_volume:/app/mercury/django_static
             - media_volume:/app/mercury/media
+            - $HOME/.config/gcloud/application_default_credentials.json:/gcp/creds.json
         expose:
             - 9000    
         environment:
@@ -49,6 +51,8 @@ services:
             POSTGRES_PORT: 5432
             MERCURY_VERBOSE: ${MERCURY_VERBOSE}
             DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL}
+            GOOGLE_APPLICATION_CREDENTIALS: /gcp/creds.json
+            GOOGLE_CLOUD_PROJECT: ${PROJECT}
         depends_on:
             - db
     db:
