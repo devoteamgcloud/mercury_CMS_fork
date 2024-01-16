@@ -7,6 +7,8 @@ import nbformat
 
 from widgets.manager import WidgetsManager
 
+import re
+
 log = logging.getLogger(__name__)
 
 
@@ -171,3 +173,17 @@ def parse_params(nb, params={}):
 
     if is_presentation(nb):
         params["output"] = "slides"
+
+
+def get_client_server_url(server_address: str) -> str:
+    """
+    Method to treat server address to WS client job_params.
+    """
+    regex = r"(.*):([0-9].*)"
+
+    server_url = server_address
+    if len(server_address.split("://")[-1].split(":")) == 1:
+        server_url = server_address + ":9000"
+    elif re.search(regex, server_address):
+        server_url = re.sub(regex, "\\1:9000", server_address, 0)
+    return server_url

@@ -17,6 +17,8 @@ from apps.ws.tasks import task_start_websocket_worker
 from apps.ws.utils import client_group, worker_group
 from apps.storage.s3utils import clean_worker_files
 
+from apps.ws.utils import get_client_server_url
+
 log = logging.getLogger(__name__)
 
 
@@ -138,12 +140,7 @@ class ClientProxy(WebsocketConsumer):
                 "notebook_id": self.notebook_id,
                 "session_id": self.session_id,
                 "worker_id": worker.id,
-                #
-                # ugly hack for docker deployment
-                #
-                "server_url": self.server_address
-                if "0.0.0.0" not in self.server_address
-                else self.server_address + ":9000",
+                "server_url": get_client_server_url(self.server_address),
             }
             transaction.on_commit(lambda: task_start_websocket_worker.delay(job_params))
 

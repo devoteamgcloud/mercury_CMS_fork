@@ -83,7 +83,7 @@ class MultiSelect:
     def __init__(
         self, value=[], choices=[], label="MultiSelect", url_key="", disabled=False, hidden=False
     ):
-        if not value and len(choices) > 1:
+        if not value.any() and len(choices) > 1:
             value = [choices[0]]
 
         self.code_uid = WidgetsManager.get_code_uid("MultiSelect", key=url_key)
